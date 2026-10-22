@@ -1,0 +1,27 @@
+[Unit]
+Description=Jump OS tenant-scoped maintenance gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tenant-gateway
+Group=tenant-gateway
+ExecStart=/usr/bin/python3 /opt/jump-tenant-gateway/gateway/tenant_gateway.py --config /etc/jump-tenant-gateway/private-policy.json
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/jump-tenant-gateway
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

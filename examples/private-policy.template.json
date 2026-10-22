@@ -1,0 +1,16 @@
+{
+  "tenant_id": "replace-with-private-tenant-id",
+  "host": "127.0.0.1",
+  "port": 8789,
+  "audit_log": "/var/log/jump-tenant-gateway/audit.jsonl",
+  "action_timeout_seconds": 300,
+  "token_hashes": {
+    "viewer": ["replace-with-a-64-character-sha256-hash"],
+    "operator": ["replace-with-a-different-64-character-sha256-hash"]
+  },
+  "actions": {
+    "status": ["/usr/bin/sudo", "/usr/local/libexec/tenant-private-status"],
+    "elementor_update": ["/usr/bin/sudo", "/usr/local/libexec/tenant-private-elementor-update"],
+    "elementor_activate": ["/usr/bin/sudo", "/usr/local/libexec/tenant-private-elementor-activate"]
+  }
+}

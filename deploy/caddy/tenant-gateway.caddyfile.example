@@ -1,0 +1,13 @@
+# Put this exact-path handler before the tenant's general reverse_proxy handler.
+# The gateway itself remains loopback-only; Caddy owns HTTPS.
+@tenant_gateway path /__tenant-gateway/*
+handle @tenant_gateway {
+    uri strip_prefix /__tenant-gateway
+    request_body {
+        max_size 1KB
+    }
+    header {
+        -Server
+    }
+    reverse_proxy 127.0.0.1:8789
+}

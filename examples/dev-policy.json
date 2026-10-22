@@ -1,0 +1,16 @@
+{
+  "tenant_id": "example",
+  "host": "127.0.0.1",
+  "port": 8789,
+  "audit_log": "/tmp/jump-tenant-gateway-example-audit.jsonl",
+  "action_timeout_seconds": 30,
+  "token_hashes": {
+    "viewer": ["dab741b6289e7dcc4a2e364595f8a59cb93aa9611f3e5ad0b6a537c4339d44d5"],
+    "operator": ["bd72c28bd2d682c0941f4870e17e6d38f73f1baea805dc5ca8b108148c1c24a7"]
+  },
+  "actions": {
+    "status": ["/usr/bin/sudo", "/usr/bin/printf", "{\"container\":\"example\",\"wordpress\":\"reachable\"}\n"],
+    "elementor_update": ["/usr/bin/sudo", "/usr/bin/printf", "{\"updated\":false,\"reason\":\"example_policy\"}\n"],
+    "elementor_activate": ["/usr/bin/sudo", "/usr/bin/printf", "{\"activated\":false,\"reason\":\"example_policy\"}\n"]
+  }
+}
