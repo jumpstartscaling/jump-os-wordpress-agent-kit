@@ -28,7 +28,7 @@ The project does not emulate host privileges in WordPress, guess provider APIs, 
 
 ## Install
 
-1. Start with [Provider compatibility](docs/PROVIDER-COMPATIBILITY.md).
+1. Start with [Provider compatibility](docs/PROVIDER-COMPATIBILITY.md), the [compatibility registry](docs/COMPATIBILITY-REGISTRY.md), and [installation topologies](docs/WORDPRESS-INSTALLATION-TOPOLOGIES.md).
 2. For most ordinary sites, follow [WordPress Bridge installation](docs/INSTALL-WORDPRESS-BRIDGE.md).
 3. For an owned VPS/container, follow [Host Gateway installation](docs/INSTALL-HOST.md).
 4. Build a private agent/human handoff package with [Recipient handoff](docs/RECIPIENT-HANDOFF.md).
@@ -69,6 +69,8 @@ The generated private package contains `AGENTS.md`, a no-dependency client, a pr
 - [Cursor](docs/agents/CURSOR.md)
 - [Local agents](docs/agents/LOCAL-AGENTS.md)
 
+Read the full [agent runtime compatibility guide](docs/AGENT-RUNTIME-COMPATIBILITY.md) before putting a private package into any local or cloud agent.
+
 ## Development checks
 
 ```bash
@@ -78,6 +80,11 @@ php -l wordpress-plugin/jump-os-wordpress-agent-bridge/jump-os-wordpress-agent-b
 ```
 
 See [architecture](docs/ARCHITECTURE.md) for the security boundary. The public repository never contains tenant domains, client names, host paths, backups, tokens, application passwords, or provider credentials.
+
+## Community and security
+
+- [Compatibility program](docs/PROVIDER-COMPATIBILITY.md) — report a tested host or agent runtime through the compatibility issue form.
+- [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) · [Security](SECURITY.md) · [Versioning](VERSIONING.md) · [Upgrading](docs/UPGRADING.md)
 
 ## License
 

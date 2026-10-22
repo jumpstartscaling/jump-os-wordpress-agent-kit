@@ -15,7 +15,12 @@ import urllib.request
 OPERATION_ID = re.compile(r"^[a-z][a-z0-9-]{0,63}$")
 API_STYLES = {
     "host-gateway": {"status": "/v1/status", "capabilities": "/v1/capabilities", "operations": "/v1/operations/"},
+    "host-gateway-v1": {"status": "/v1/status", "capabilities": "/v1/capabilities", "operations": "/v1/operations/"},
     "wordpress-bridge": {"status": "/status", "capabilities": "/capabilities", "operations": "/operations/"},
+}
+V1_OPERATION_PATHS = {
+    "plugin-elementor-update": "elementor/update",
+    "plugin-elementor-activate": "elementor/activate",
 }
 
 
@@ -24,6 +29,10 @@ def request_details(style: str, command: str, operation: str | None = None) -> t
         raise ValueError(f"unsupported API style: {style}")
     if command in {"status", "capabilities"}:
         return "GET", API_STYLES[style][command]
+    if command == "run" and style == "host-gateway-v1":
+        if operation in V1_OPERATION_PATHS:
+            return "POST", API_STYLES[style]["operations"] + V1_OPERATION_PATHS[operation]
+        raise ValueError("host-gateway-v1 supports only documented legacy operation identifiers")
     if command == "run" and operation and OPERATION_ID.fullmatch(operation):
         return "POST", API_STYLES[style]["operations"] + operation
     raise ValueError("operation must be a lowercase kebab-case capability identifier")

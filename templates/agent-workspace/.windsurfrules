@@ -1,0 +1,1 @@
+Read AGENTS.md before acting. This workspace is for one WordPress tenant only. Do not access parent folders, host credentials, SSH, Docker, databases, other domains, or unlisted gateway capabilities. Never print or commit .env values.

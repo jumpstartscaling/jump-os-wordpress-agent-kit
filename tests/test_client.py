@@ -25,6 +25,14 @@ class ClientTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             tenantctl.request_details("host-gateway", "run", "shell;whoami")
 
+    def test_v1_host_gateway_uses_only_known_legacy_operation_paths(self):
+        self.assertEqual(
+            tenantctl.request_details("host-gateway-v1", "run", "plugin-elementor-update"),
+            ("POST", "/v1/operations/elementor/update"),
+        )
+        with self.assertRaises(ValueError):
+            tenantctl.request_details("host-gateway-v1", "run", "plugin-unknown-update")
+
 
 if __name__ == "__main__":
     unittest.main()

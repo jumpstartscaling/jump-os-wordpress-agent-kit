@@ -1,0 +1,73 @@
+name: Compatibility report
+description: Report a tested WordPress host, installation pattern, or agent runtime.
+title: "compatibility: "
+labels: [compatibility]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include a real tenant URL, credentials, customer content, IP address, backup file, or private package."
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence level
+      options:
+        - Documented-only
+        - Local reproducible test
+        - Provider sandbox/staging verified
+        - Production verified with anonymized evidence
+    validations:
+      required: true
+  - type: input
+    id: provider
+    attributes:
+      label: Hosting provider and plan class
+      placeholder: "Example: provider name, managed WordPress plan"
+    validations:
+      required: true
+  - type: dropdown
+    id: installation
+    attributes:
+      label: WordPress installation type
+      options:
+        - Single-site self-hosted/shared hosting
+        - Managed WordPress
+        - VPS or container
+        - WordPress.com
+        - Multisite
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: access
+    attributes:
+      label: Confirmed capabilities
+      options:
+        - label: Custom plugins may be installed and activated.
+        - label: WordPress application passwords are available for the intended role.
+        - label: A backup/restore process was confirmed before maintenance testing.
+        - label: A staging or sandbox test was used when the provider supports it.
+  - type: dropdown
+    id: adapter
+    attributes:
+      label: Tested adapter
+      options:
+        - Native WordPress REST
+        - WordPress Bridge
+        - Host Gateway
+        - Agent-workspace instructions only
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Anonymized steps and outcome
+      description: Include versions, expected behavior, actual behavior, and sanitized error text.
+    validations:
+      required: true
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Disclosure confirmation
+      options:
+        - label: I removed secrets, tenant identity, customer data, and private endpoint details.
+          required: true

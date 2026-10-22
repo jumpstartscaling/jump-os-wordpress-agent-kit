@@ -103,6 +103,28 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual([item["id"] for item in payload["operations"]], ["plugin-elementor-activate", "plugin-elementor-update"])
 
+    def test_legacy_policy_translates_to_canonical_capabilities(self):
+        root = Path(self.temp.name)
+        legacy = {
+            "tenant_id": "legacy-test",
+            "host": "127.0.0.1",
+            "port": 8789,
+            "audit_log": str(root / "legacy-audit.jsonl"),
+            "token_hashes": {
+                "viewer": [hashlib.sha256(self.viewer_token.encode()).hexdigest()],
+                "operator": [hashlib.sha256(self.operator_token.encode()).hexdigest()],
+            },
+            "actions": {
+                "status": ["/usr/bin/sudo", "/usr/bin/true"],
+                "elementor_update": ["/usr/bin/sudo", "/usr/bin/true"],
+            },
+        }
+        path = root / "legacy-policy.json"
+        path.write_text(json.dumps(legacy), encoding="utf-8")
+        config = tenant_gateway.GatewayConfig.load(path)
+        self.assertEqual(config.status.role, "viewer")
+        self.assertEqual(list(config.operations), ["plugin-elementor-update"])
+
 
 if __name__ == "__main__":
     unittest.main()

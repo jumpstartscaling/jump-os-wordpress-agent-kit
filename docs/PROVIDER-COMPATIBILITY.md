@@ -2,6 +2,8 @@
 
 This project is compatible with WordPress deployment models, not with a made-up universal hosting-control API. Choose the least-powerful path that the provider and site actually support.
 
+For the current evidence level of individual providers and a safe public reporting path, see the [compatibility registry](COMPATIBILITY-REGISTRY.md). For deployment shapes beyond named providers, see [WordPress installation topologies](WORDPRESS-INSTALLATION-TOPOLOGIES.md).
+
 | Provider/setup | Content work | Bridge plugin | Host Gateway | Maintenance boundary |
 | --- | --- | --- | --- | --- |
 | Self-hosted WordPress.org, cPanel, Plesk, DirectAdmin | WordPress Editor + application password | Yes, if the site owner can upload/activate a plugin | Only if the owner operates the server | Owner verifies backup and filesystem behavior. |

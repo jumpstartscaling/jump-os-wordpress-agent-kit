@@ -26,6 +26,10 @@ from typing import Any
 
 ROLE_ORDER = {"viewer": 0, "operator": 1}
 OPERATION_ID = re.compile(r"^[a-z][a-z0-9-]{0,63}$")
+LEGACY_OPERATION_IDS = {
+    "elementor_update": "plugin-elementor-update",
+    "elementor_activate": "plugin-elementor-activate",
+}
 
 
 class PolicyError(ValueError):
@@ -64,13 +68,33 @@ class GatewayConfig:
         return FixedOperation(role=role, command=tuple(command))
 
     @classmethod
+    def _legacy_actions(cls, raw_actions: Any) -> tuple[FixedOperation, dict[str, FixedOperation]]:
+        """Translate the 0.1 policy format without widening its permissions."""
+        if not isinstance(raw_actions, dict) or "status" not in raw_actions:
+            raise PolicyError("legacy actions must include status")
+        status = cls._operation({"role": "viewer", "command": raw_actions["status"]}, "status")
+        operations: dict[str, FixedOperation] = {}
+        for action_name, command in raw_actions.items():
+            if action_name == "status":
+                continue
+            if not isinstance(action_name, str):
+                raise PolicyError("legacy action names must be strings")
+            operation_id = LEGACY_OPERATION_IDS.get(action_name, action_name.replace("_", "-"))
+            if not OPERATION_ID.fullmatch(operation_id) or operation_id in operations:
+                raise PolicyError("legacy action names must map to unique lowercase kebab-case identifiers")
+            operations[operation_id] = cls._operation({"role": "operator", "command": command}, operation_id)
+        if not operations:
+            raise PolicyError("legacy actions must include at least one operation")
+        return status, operations
+
+    @classmethod
     def load(cls, path: Path) -> "GatewayConfig":
         try:
             raw = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             raise PolicyError(f"cannot load policy: {exc}") from exc
 
-        required = {"tenant_id", "host", "port", "audit_log", "token_hashes", "status", "operations"}
+        required = {"tenant_id", "host", "port", "audit_log", "token_hashes"}
         missing = required - raw.keys()
         if missing:
             raise PolicyError(f"policy is missing keys: {', '.join(sorted(missing))}")
@@ -97,17 +121,24 @@ class GatewayConfig:
         if "viewer" not in hashes or "operator" not in hashes:
             raise PolicyError("policy must define both viewer and operator tokens")
 
-        status = cls._operation(raw["status"], "status")
-        if status.role != "viewer":
-            raise PolicyError("status must require viewer role")
-        raw_operations = raw["operations"]
-        if not isinstance(raw_operations, dict) or not raw_operations:
-            raise PolicyError("operations must be a non-empty object")
-        operations: dict[str, FixedOperation] = {}
-        for operation_id, operation in raw_operations.items():
-            if not isinstance(operation_id, str) or not OPERATION_ID.fullmatch(operation_id):
-                raise PolicyError("operation identifiers must be lowercase kebab-case")
-            operations[operation_id] = cls._operation(operation, operation_id)
+        if "status" in raw or "operations" in raw:
+            if "status" not in raw or "operations" not in raw:
+                raise PolicyError("canonical policies require both status and operations")
+            status = cls._operation(raw["status"], "status")
+            if status.role != "viewer":
+                raise PolicyError("status must require viewer role")
+            raw_operations = raw["operations"]
+            if not isinstance(raw_operations, dict) or not raw_operations:
+                raise PolicyError("operations must be a non-empty object")
+            operations: dict[str, FixedOperation] = {}
+            for operation_id, operation in raw_operations.items():
+                if not isinstance(operation_id, str) or not OPERATION_ID.fullmatch(operation_id):
+                    raise PolicyError("operation identifiers must be lowercase kebab-case")
+                operations[operation_id] = cls._operation(operation, operation_id)
+        elif "actions" in raw:
+            status, operations = cls._legacy_actions(raw["actions"])
+        else:
+            raise PolicyError("policy must use canonical status/operations or legacy actions")
 
         timeout = raw.get("action_timeout_seconds", 180)
         if not isinstance(timeout, int) or not 1 <= timeout <= 900:

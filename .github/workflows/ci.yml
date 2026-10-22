@@ -16,6 +16,6 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-      - run: python3 -m py_compile gateway/tenant_gateway.py client/tenantctl.py scripts/build_recipient_pack.py scripts/build_wordpress_bridge_zip.py
+      - run: python3 -m py_compile gateway/tenant_gateway.py client/tenantctl.py scripts/build_recipient_pack.py scripts/build_wordpress_bridge_zip.py scripts/build_release_package.py
       - run: php -l wordpress-plugin/jump-os-wordpress-agent-bridge/jump-os-wordpress-agent-bridge.php
       - run: python3 -m unittest discover -s tests -v

@@ -1,0 +1,24 @@
+name: Provider or agent adapter proposal
+description: Propose a documented, bounded integration for a host or agent runtime.
+title: "adapter: "
+labels: [adapter-proposal]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Provider or agent runtime
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Official contract and proposed capability boundary
+      description: Link official documentation. Explain required credential type, allowed operations, revocation, and no-access cases.
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Threat model, rollback, and compatibility impact
+    validations:
+      required: true

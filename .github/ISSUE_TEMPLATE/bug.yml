@@ -1,0 +1,37 @@
+name: Bug report
+description: Report a reproducible defect without tenant data or secrets.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Security vulnerabilities belong in private reporting, not this form. Never include a private package or credentials."
+  - type: input
+    id: version
+    attributes:
+      label: Kit version or commit
+    validations:
+      required: true
+  - type: dropdown
+    id: adapter
+    attributes:
+      label: Adapter
+      options:
+        - Native WordPress REST
+        - WordPress Bridge
+        - Host Gateway
+        - Recipient package
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Sanitized reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true

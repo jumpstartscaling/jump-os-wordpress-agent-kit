@@ -1,0 +1,6 @@
+---
+description: One-tenant WordPress operator boundary
+alwaysApply: true
+---
+
+Read `AGENTS.md` before acting. Operate only the named WordPress tenant. Use only listed capabilities and never read, print, commit, or transmit `.env` values. Do not use SSH, Docker, databases, host paths, or other domains.
