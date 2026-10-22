@@ -10,13 +10,13 @@ Group=tenant-gateway
 ExecStart=/usr/bin/python3 /opt/jump-tenant-gateway/gateway/tenant_gateway.py --config /etc/jump-tenant-gateway/private-policy.json
 Restart=on-failure
 RestartSec=3
-NoNewPrivileges=true
+# Deliberately omitted: NoNewPrivileges and an empty CapabilityBoundingSet
+# would both block the three exact sudoers wrappers used by this service.
+# The fixed sudoers command list is the privilege boundary.
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/var/log/jump-tenant-gateway
-CapabilityBoundingSet=
-AmbientCapabilities=
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 RestrictNamespaces=true
 LockPersonality=true

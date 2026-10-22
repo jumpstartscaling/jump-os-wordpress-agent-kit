@@ -38,6 +38,7 @@ WordPress Editor and gateway operator are separate credentials. Neither one is a
 - The gateway binds only to `127.0.0.1` or `::1`; the reverse proxy owns TLS and public routing.
 - The gateway service user is not in the `docker` group and has no general `sudo` or SSH shell privilege.
 - Each `sudoers` entry names one wrapper with no wildcard arguments.
+- The systemd unit cannot use `NoNewPrivileges=true`, because that would block the deliberately narrow `sudo` elevation. The exact sudoers allowlist is the privilege boundary; do not widen it.
 - Wrapper scripts use fixed `docker exec` targets supplied by a root-owned tenant configuration. They must not evaluate request input.
 - Tokens are stored as SHA-256 hashes in the private policy. Audit events never store bearer tokens or WordPress passwords.
 - A public repository contains templates only. Production domains, paths, usernames, tokens, backups, and Caddy credentials stay private.

@@ -29,6 +29,7 @@ def main() -> int:
     parser.add_argument("--gateway-token-file", type=Path, required=True)
     parser.add_argument("--wordpress-url", required=True)
     parser.add_argument("--wordpress-username", required=True)
+    parser.add_argument("--wordpress-dashboard-password-file", type=Path, required=True)
     parser.add_argument("--wordpress-application-password-file", type=Path, required=True)
     args = parser.parse_args()
 
@@ -49,6 +50,7 @@ def main() -> int:
             f"TENANT_GATEWAY_TOKEN={read_secret(args.gateway_token_file)}\n"
             f"WORDPRESS_URL={args.wordpress_url.rstrip('/')}\n"
             f"WORDPRESS_USERNAME={args.wordpress_username}\n"
+            f"WORDPRESS_DASHBOARD_PASSWORD={read_secret(args.wordpress_dashboard_password_file)}\n"
             f"WORDPRESS_APPLICATION_PASSWORD={read_secret(args.wordpress_application_password_file)}\n",
             encoding="utf-8",
         )

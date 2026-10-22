@@ -10,6 +10,7 @@ python3 scripts/build_recipient_pack.py \
   --gateway-token-file private/gateway-token.txt \
   --wordpress-url "https://client.example" \
   --wordpress-username "content-operator" \
+  --wordpress-dashboard-password-file private/wordpress-dashboard-password.txt \
   --wordpress-application-password-file private/wordpress-app-password.txt
 ```
 
