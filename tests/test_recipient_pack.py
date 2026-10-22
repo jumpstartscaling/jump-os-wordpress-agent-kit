@@ -44,6 +44,15 @@ class RecipientPackTests(unittest.TestCase):
                 self.assertIn("TENANT_GATEWAY_TOKEN=gateway-token-test-only", env)
                 self.assertIn("WORDPRESS_DASHBOARD_PASSWORD=dashboard-password-test-only", env)
                 self.assertIn("WORDPRESS_APPLICATION_PASSWORD=app-password-test-only", env)
+                archive.extract("tenant-access-pack/.env", root)
+            env_file = root / "tenant-access-pack" / ".env"
+            sourced = subprocess.run(
+                ["/bin/sh", "-c", '. "$1"; printf "%s" "$TENANT_LABEL"', "sh", str(env_file)],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(sourced.stdout, "Test Tenant")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import shlex
 import shutil
 import tempfile
 from pathlib import Path
@@ -19,6 +20,11 @@ def read_secret(path: Path | None) -> str:
     if not value:
         raise ValueError(f"secret file is empty: {path}")
     return value
+
+
+def env_assignment(name: str, value: str) -> str:
+    """Return a POSIX-shell-safe assignment for a private handoff .env file."""
+    return f"{name}={shlex.quote(value)}\n"
 
 
 def main() -> int:
@@ -43,15 +49,18 @@ def main() -> int:
         shutil.copy2(ROOT / "templates" / "recipient-pack" / "AGENTS.md", package / "AGENTS.md")
         shutil.copy2(ROOT / "templates" / "recipient-pack" / "START-HERE.md", package / "START-HERE.md")
         shutil.copytree(ROOT / "docs" / "agents", package / "agent-guides")
+        environment = {
+            "TENANT_LABEL": args.tenant_label,
+            "TENANT_GATEWAY_ENDPOINT": args.gateway_endpoint.rstrip("/"),
+            "TENANT_GATEWAY_TOKEN": read_secret(args.gateway_token_file),
+            "WORDPRESS_URL": args.wordpress_url.rstrip("/"),
+            "WORDPRESS_USERNAME": args.wordpress_username,
+            "WORDPRESS_DASHBOARD_PASSWORD": read_secret(args.wordpress_dashboard_password_file),
+            "WORDPRESS_APPLICATION_PASSWORD": read_secret(args.wordpress_application_password_file),
+        }
         (package / ".env").write_text(
             "# PRIVATE: revoke and replace these credentials if this package is misdirected.\n"
-            f"TENANT_LABEL={args.tenant_label}\n"
-            f"TENANT_GATEWAY_ENDPOINT={args.gateway_endpoint.rstrip('/')}\n"
-            f"TENANT_GATEWAY_TOKEN={read_secret(args.gateway_token_file)}\n"
-            f"WORDPRESS_URL={args.wordpress_url.rstrip('/')}\n"
-            f"WORDPRESS_USERNAME={args.wordpress_username}\n"
-            f"WORDPRESS_DASHBOARD_PASSWORD={read_secret(args.wordpress_dashboard_password_file)}\n"
-            f"WORDPRESS_APPLICATION_PASSWORD={read_secret(args.wordpress_application_password_file)}\n",
+            + "".join(env_assignment(name, value) for name, value in environment.items()),
             encoding="utf-8",
         )
         (package / "README-PRIVATE.txt").write_text(
