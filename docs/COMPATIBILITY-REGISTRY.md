@@ -30,7 +30,7 @@ This registry deliberately distinguishes an installation pattern from a provider
 
 ## Help us move a candidate to verified
 
-Open a [compatibility report](https://github.com/jumpstartscaling/jump-os-wordpress-agent-kit/issues/new?template=compatibility.yml) after testing. Include no tenant identity or secrets. The most useful reports state:
+Add a reply to the [compatibility discussion](https://github.com/jumpstartscaling/jump-os-wordpress-agent-kit/discussions/4) after testing. Include no tenant identity or secrets. The most useful reports state:
 
 1. provider and exact plan class;
 2. single site or multisite, WordPress/PHP version, and WAF/security plugin presence;
@@ -38,4 +38,4 @@ Open a [compatibility report](https://github.com/jumpstartscaling/jump-os-wordpr
 4. which adapter was tried and the anonymized result;
 5. whether the test was local, sandbox, or production with anonymized evidence.
 
-Maintainers will not mark a row verified merely from a comment; the report must include reproducible, sanitized evidence.
+Maintainers will not mark a row verified merely from a comment; the report must include reproducible, sanitized evidence. The resulting work and evidence status are tracked in the [public roadmap](https://github.com/users/jumpstartscaling/projects/29).

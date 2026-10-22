@@ -16,12 +16,12 @@ class ReleasePackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "release"
             subprocess.run(
-                [sys.executable, str(ROOT / "scripts" / "build_release_package.py"), "--version", "0.3.0", "--output", str(output)],
+                [sys.executable, str(ROOT / "scripts" / "build_release_package.py"), "--version", "0.3.1", "--output", str(output)],
                 check=True,
                 cwd=ROOT,
             )
             manifest = json.loads((output / "release-manifest.json").read_text(encoding="utf-8"))
-            self.assertEqual(manifest["version"], "0.3.0")
+            self.assertEqual(manifest["version"], "0.3.1")
             self.assertEqual(len(manifest["artifacts"]), 2)
             for artifact in manifest["artifacts"]:
                 path = output / artifact["name"]

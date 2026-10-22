@@ -4,7 +4,7 @@ Thank you for helping make WordPress access safer for people and agents.
 
 ## Contribution lanes
 
-- **Compatibility evidence:** report a tested provider, WordPress deployment form, and agent runtime through the compatibility issue form.
+- **Compatibility evidence:** add a sanitized report to the [compatibility discussion](https://github.com/jumpstartscaling/jump-os-wordpress-agent-kit/discussions/4). The public roadmap records the resulting evidence status.
 - **Documentation:** clarify install, rollback, or agent instructions without adding unsupported provider claims.
 - **Adapter/code:** add an isolated adapter or capability with tests, threat-model notes, upgrade behavior, and a rollback path.
 
