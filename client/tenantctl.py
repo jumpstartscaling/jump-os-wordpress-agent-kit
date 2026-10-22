@@ -30,7 +30,11 @@ def main() -> int:
         args.endpoint.rstrip("/") + path,
         method=method,
         data=b"{}" if method == "POST" else None,
-        headers={"Authorization": f"Bearer {args.token}", "Accept": "application/json"},
+        headers={
+            "Authorization": f"Bearer {args.token}",
+            "Accept": "application/json",
+            "User-Agent": "JumpTenantGateway/0.1 (+https://github.com/jumpstartscaling/jump-os-tenant-gateway)",
+        },
     )
     try:
         with urllib.request.urlopen(request, timeout=310) as response:
