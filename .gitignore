@@ -4,5 +4,6 @@ __pycache__/
 .env
 *.token
 *.zip
+/release-*/
 /recipient-pack/
 private/

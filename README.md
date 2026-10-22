@@ -83,7 +83,7 @@ See [architecture](docs/ARCHITECTURE.md) for the security boundary. The public r
 
 ## Community and security
 
-- [Public Roadmap](https://github.com/users/jumpstartscaling/projects/29) — the single public view of active work, compatibility evidence, and release gates.
+- [Public Roadmap](docs/ROADMAP.md) — the single public view of active work, compatibility evidence, and release gates.
 - [Compatibility discussion](https://github.com/jumpstartscaling/jump-os-wordpress-agent-kit/discussions/4) — report a tested host or agent runtime without creating a repository issue.
 - [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) · [Security](SECURITY.md) · [Versioning](VERSIONING.md) · [Upgrading](docs/UPGRADING.md)
 

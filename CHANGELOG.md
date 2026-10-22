@@ -2,6 +2,11 @@
 
 All notable changes are recorded here. This project uses Semantic Versioning; see [VERSIONING.md](VERSIONING.md).
 
+## 0.3.2 - 2026-10-22
+
+- Add a durable, repository-native public roadmap after GitHub Projects API item creation returned orphaned, non-public cards.
+- Keep the public repository surface clean: one `main` branch, no open pull requests, no visible issue-form intake, a compatibility Discussion, and source-controlled roadmap status.
+
 ## 0.3.1 - 2026-10-22
 
 - Move public work tracking to the dedicated public roadmap Project.

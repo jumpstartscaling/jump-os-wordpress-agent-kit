@@ -38,4 +38,4 @@ Add a reply to the [compatibility discussion](https://github.com/jumpstartscalin
 4. which adapter was tried and the anonymized result;
 5. whether the test was local, sandbox, or production with anonymized evidence.
 
-Maintainers will not mark a row verified merely from a comment; the report must include reproducible, sanitized evidence. The resulting work and evidence status are tracked in the [public roadmap](https://github.com/users/jumpstartscaling/projects/29).
+Maintainers will not mark a row verified merely from a comment; the report must include reproducible, sanitized evidence. The resulting work and evidence status are tracked in the [public roadmap](ROADMAP.md).
