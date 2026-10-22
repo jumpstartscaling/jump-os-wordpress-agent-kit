@@ -49,6 +49,7 @@ def main() -> int:
         shutil.copy2(ROOT / "client" / "tenantctl.py", package / "tenantctl.py")
         shutil.copy2(ROOT / "templates" / "recipient-pack" / "AGENTS.md", package / "AGENTS.md")
         shutil.copy2(ROOT / "templates" / "recipient-pack" / "START-HERE.md", package / "START-HERE.md")
+        shutil.copy2(ROOT / "docs" / "PAGE-BUILDERS-PLUGINS-THEMES.md", package / "PAGE-BUILDERS-PLUGINS-THEMES.md")
         shutil.copytree(ROOT / "templates" / "agent-workspace", package, dirs_exist_ok=True)
         shutil.copytree(ROOT / "docs" / "agents", package / "agent-guides")
         environment = {

@@ -39,6 +39,7 @@ class RecipientPackTests(unittest.TestCase):
             with zipfile.ZipFile(output) as archive:
                 names = archive.namelist()
                 self.assertIn("tenant-access-pack/AGENTS.md", names)
+                self.assertIn("tenant-access-pack/PAGE-BUILDERS-PLUGINS-THEMES.md", names)
                 self.assertIn("tenant-access-pack/tenantctl.py", names)
                 self.assertIn("tenant-access-pack/CLAUDE.md", names)
                 self.assertIn("tenant-access-pack/GEMINI.md", names)
@@ -49,6 +50,9 @@ class RecipientPackTests(unittest.TestCase):
                 self.assertIn("TENANT_GATEWAY_API_STYLE=host-gateway", env)
                 self.assertIn("WORDPRESS_DASHBOARD_PASSWORD=dashboard-password-test-only", env)
                 self.assertIn("WORDPRESS_APPLICATION_PASSWORD=app-password-test-only", env)
+                guide = archive.read("tenant-access-pack/PAGE-BUILDERS-PLUGINS-THEMES.md").decode("utf-8")
+                self.assertIn("ThemeForest", guide)
+                self.assertIn("Elementor", guide)
                 archive.extract("tenant-access-pack/.env", root)
             env_file = root / "tenant-access-pack" / ".env"
             sourced = subprocess.run(

@@ -19,6 +19,7 @@ WORKSPACE_FILES = (
     ROOT / "templates" / "recipient-pack" / "AGENTS.md",
     ROOT / "templates" / "recipient-pack" / "START-HERE.md",
     ROOT / "docs" / "AGENT-RUNTIME-COMPATIBILITY.md",
+    ROOT / "docs" / "PAGE-BUILDERS-PLUGINS-THEMES.md",
 )
 WORKSPACE_DIRS = (
     ROOT / "templates" / "agent-workspace",

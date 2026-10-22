@@ -16,18 +16,20 @@ class ReleasePackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "release"
             subprocess.run(
-                [sys.executable, str(ROOT / "scripts" / "build_release_package.py"), "--version", "0.3.2", "--output", str(output)],
+                [sys.executable, str(ROOT / "scripts" / "build_release_package.py"), "--version", "0.3.3", "--output", str(output)],
                 check=True,
                 cwd=ROOT,
             )
             manifest = json.loads((output / "release-manifest.json").read_text(encoding="utf-8"))
-            self.assertEqual(manifest["version"], "0.3.2")
+            self.assertEqual(manifest["version"], "0.3.3")
             self.assertEqual(len(manifest["artifacts"]), 2)
             for artifact in manifest["artifacts"]:
                 path = output / artifact["name"]
                 self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), artifact["sha256"])
                 with zipfile.ZipFile(path) as archive:
                     self.assertNotIn(".env", [Path(name).name for name in archive.namelist()])
+                    if artifact["name"].startswith("jump-os-agent-workspace-template"):
+                        self.assertIn("docs/PAGE-BUILDERS-PLUGINS-THEMES.md", archive.namelist())
             self.assertIn("release-manifest.json", (output / "SHA256SUMS.txt").read_text(encoding="utf-8"))
 
 

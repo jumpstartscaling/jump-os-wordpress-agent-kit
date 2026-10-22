@@ -32,6 +32,7 @@ The project does not emulate host privileges in WordPress, guess provider APIs, 
 2. For most ordinary sites, follow [WordPress Bridge installation](docs/INSTALL-WORDPRESS-BRIDGE.md).
 3. For an owned VPS/container, follow [Host Gateway installation](docs/INSTALL-HOST.md).
 4. Build a private agent/human handoff package with [Recipient handoff](docs/RECIPIENT-HANDOFF.md).
+5. Before editing a site built with a page builder, premium theme, or complex plugin stack, use [Page builders plugins and themes](docs/PAGE-BUILDERS-PLUGINS-THEMES.md).
 
 The bridge plugin is built locally so releases never contain tenant credentials:
 

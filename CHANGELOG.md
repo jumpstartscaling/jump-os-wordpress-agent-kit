@@ -2,6 +2,12 @@
 
 All notable changes are recorded here. This project uses Semantic Versioning; see [VERSIONING.md](VERSIONING.md).
 
+## 0.3.3 - 2026-10-22
+
+- Add a page-builder, plugin, and theme operating guide for humans and tenant-scoped agents.
+- Cover major builder boundaries, common plugin families, official documentation discovery, ThemeForest/Envato assets, and approval/recovery gates.
+- Include the guide in both the secret-free agent workspace release asset and generated private recipient packages.
+
 ## 0.3.2 - 2026-10-22
 
 - Add a durable, repository-native public roadmap after GitHub Projects API item creation returned orphaned, non-public cards.
