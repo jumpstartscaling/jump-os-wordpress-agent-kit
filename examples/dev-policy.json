@@ -8,9 +8,14 @@
     "viewer": ["dab741b6289e7dcc4a2e364595f8a59cb93aa9611f3e5ad0b6a537c4339d44d5"],
     "operator": ["bd72c28bd2d682c0941f4870e17e6d38f73f1baea805dc5ca8b108148c1c24a7"]
   },
-  "actions": {
-    "status": ["/usr/bin/sudo", "/usr/bin/printf", "{\"container\":\"example\",\"wordpress\":\"reachable\"}\n"],
-    "elementor_update": ["/usr/bin/sudo", "/usr/bin/printf", "{\"updated\":false,\"reason\":\"example_policy\"}\n"],
-    "elementor_activate": ["/usr/bin/sudo", "/usr/bin/printf", "{\"activated\":false,\"reason\":\"example_policy\"}\n"]
+  "status": {
+    "role": "viewer",
+    "command": ["/usr/bin/sudo", "/usr/bin/printf", "{\"wordpress\":\"reachable\"}\n"]
+  },
+  "operations": {
+    "plugin-example-activate": {
+      "role": "operator",
+      "command": ["/usr/bin/sudo", "/usr/bin/printf", "{\"activated\":false,\"reason\":\"example_policy\"}\n"]
+    }
   }
 }

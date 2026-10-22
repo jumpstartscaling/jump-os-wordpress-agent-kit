@@ -6,6 +6,6 @@ Open the private recipient package as a project. Codex local environments can ke
 
 ## Codex Cloud
 
-Create a separate cloud environment from the public repository or a private recipient repository. Add the tenant gateway host as the only custom destination required for maintenance. Put the recipient's gateway token and WordPress application password in that person's private secrets, not in shared repository files. Codex Cloud tasks start in isolated workspaces, so repository access alone does not grant host access.
+Create a separate cloud environment from the public repository or a private recipient repository. Add only the canonical WordPress site domain (Bridge/REST mode) or the named tenant gateway host (Host Gateway mode) as a custom destination. Put the recipient's gateway token and WordPress application password in that person's private secrets, not in shared repository files. Codex Cloud tasks start in isolated workspaces, so repository access alone does not grant host access.
 
-Use a prompt such as: “Read AGENTS.md. Work only on the named tenant. First call capabilities and status. Do not attempt SSH, Docker, filesystem, or any route not listed by the gateway.”
+Use a prompt such as: “Read AGENTS.md. Work only on the named tenant. First call capabilities and status. Do not attempt SSH, Docker, filesystem, or any route not listed by the access adapter.”

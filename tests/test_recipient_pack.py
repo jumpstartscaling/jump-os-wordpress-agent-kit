@@ -42,6 +42,7 @@ class RecipientPackTests(unittest.TestCase):
                 self.assertIn("tenant-access-pack/tenantctl.py", names)
                 env = archive.read("tenant-access-pack/.env").decode("utf-8")
                 self.assertIn("TENANT_GATEWAY_TOKEN=gateway-token-test-only", env)
+                self.assertIn("TENANT_GATEWAY_API_STYLE=host-gateway", env)
                 self.assertIn("WORDPRESS_DASHBOARD_PASSWORD=dashboard-password-test-only", env)
                 self.assertIn("WORDPRESS_APPLICATION_PASSWORD=app-password-test-only", env)
                 archive.extract("tenant-access-pack/.env", root)

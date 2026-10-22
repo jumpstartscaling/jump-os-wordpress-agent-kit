@@ -5,7 +5,7 @@ You are authorized to operate **only the tenant named in `.env`**.
 Allowed:
 
 - Use `python3 tenantctl.py status` and `python3 tenantctl.py capabilities`.
-- Use the named Elementor maintenance commands only when the owner requests them.
+- Use `python3 tenantctl.py run CAPABILITY-ID` only when the owner requests that exact listed capability.
 - Use the WordPress account in `.env` only for this tenant's content, pages, media, and approved Elementor work.
 
 Forbidden:

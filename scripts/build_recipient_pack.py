@@ -32,6 +32,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True, help="private ZIP output path")
     parser.add_argument("--tenant-label", required=True)
     parser.add_argument("--gateway-endpoint", required=True)
+    parser.add_argument("--access-mode", choices=("host-gateway", "wordpress-bridge"), default="host-gateway")
     parser.add_argument("--gateway-token-file", type=Path, required=True)
     parser.add_argument("--wordpress-url", required=True)
     parser.add_argument("--wordpress-username", required=True)
@@ -51,6 +52,7 @@ def main() -> int:
         shutil.copytree(ROOT / "docs" / "agents", package / "agent-guides")
         environment = {
             "TENANT_LABEL": args.tenant_label,
+            "TENANT_GATEWAY_API_STYLE": args.access_mode,
             "TENANT_GATEWAY_ENDPOINT": args.gateway_endpoint.rstrip("/"),
             "TENANT_GATEWAY_TOKEN": read_secret(args.gateway_token_file),
             "WORDPRESS_URL": args.wordpress_url.rstrip("/"),

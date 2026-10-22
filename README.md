@@ -1,51 +1,67 @@
-# Jump OS Tenant Gateway
+# Jump OS WordPress Agent Kit
 
-Tenant-scoped, auditable access for human and AI operators.
+Safe, tenant-scoped access for people and AI agents operating WordPress.
 
 > Created by Christopher Amaya · a Jump OS Free Value project · MIT licensed
 
-Giving an AI agent a normal SSH account, `sudo`, or Docker access is **not** tenant isolation. This project provides a small, explicit maintenance gateway and an onboarding package so an operator can work on one WordPress tenant without being able to browse or control the rest of a host.
+This is not a Jump OS-only product. It is a free, open-source kit designed for ordinary WordPress owners, agencies, shared hosting, managed WordPress, VPS deployments, and cloud-agent users. It gives every installation the same rule: an agent receives only the capabilities you deliberately grant to one WordPress site.
 
-## What it does
+## Choose the installation path
 
-- exposes only named, allowlisted tenant operations over a bearer-token API;
-- keeps host privileges in root-owned wrapper scripts, rather than in the gateway process;
-- uses a dedicated non-sudo, non-Docker service account;
-- records an audit event for every authenticated request without logging tokens;
-- supports a separate WordPress Editor account for content and Elementor work;
-- creates a shareable recipient package for Codex, ChatGPT, Claude, Cursor, and local agents.
+| Situation | Use this path | What it provides |
+| --- | --- | --- |
+| Any normal WordPress site with an Editor account and application passwords | **Native WordPress REST** | Content, pages, media, and Elementor editing through the site's own role system. |
+| Shared hosting or managed WordPress that permits a custom plugin | **WordPress Bridge** | Token-scoped status and activation of explicitly allowed installed plugins; no server access required. |
+| VPS, Docker, or a host where the owner can install a local service | **Host Gateway** | Fixed, audited maintenance operations such as verified-backup plugin update. |
+| Provider forbids custom plugins or server access | **Native REST or provider dashboard** | Content work only; maintenance stays with the owner/provider. |
 
-The reference policy includes exactly these maintenance operations:
+The project does not emulate host privileges in WordPress, guess provider APIs, or supply a universal “update any plugin” endpoint. That would make a dangerous promise. [Provider compatibility](docs/PROVIDER-COMPATIBILITY.md) states the supported path for each hosting model.
 
-| Operation | Purpose |
-| --- | --- |
-| `GET /v1/status` | Read tenant health and Elementor state. |
-| `POST /v1/operations/elementor/update` | Back up and update Elementor through WordPress's normal updater. |
-| `POST /v1/operations/elementor/activate` | Restore Elementor activation when an authorized operator needs it. |
+## What every path protects
 
-There is no generic shell endpoint, file browser, Docker socket, database console, or arbitrary plugin endpoint.
+- one named WordPress tenant per package and per token;
+- a least-privilege WordPress role for content work;
+- no SSH, Docker, database console, filesystem browser, shell, or sibling-tenant discovery in a recipient package;
+- capability discovery before an agent acts;
+- no arbitrary plugin name, path, command, or request argument in maintenance calls;
+- private secrets separated from the public repository and from agent instructions.
 
-## Security model
+## Install
 
-The gateway service account may invoke only three exact root-owned wrappers through narrowly scoped `sudoers` rules. The wrappers contain no user-supplied command fragments. A gateway token is scoped to one tenant and may be revoked by removing its SHA-256 hash from the private policy and restarting the service.
+1. Start with [Provider compatibility](docs/PROVIDER-COMPATIBILITY.md).
+2. For most ordinary sites, follow [WordPress Bridge installation](docs/INSTALL-WORDPRESS-BRIDGE.md).
+3. For an owned VPS/container, follow [Host Gateway installation](docs/INSTALL-HOST.md).
+4. Build a private agent/human handoff package with [Recipient handoff](docs/RECIPIENT-HANDOFF.md).
 
-For content changes, use a WordPress user with the `editor` role. Do **not** make the content operator a WordPress administrator merely to let an agent update plugins. Keep maintenance privileges in this gateway.
-
-See [the architecture](docs/ARCHITECTURE.md), [host installation guide](docs/INSTALL-HOST.md), and [recipient handoff guide](docs/RECIPIENT-HANDOFF.md).
-
-## Quick start (development)
+The bridge plugin is built locally so releases never contain tenant credentials:
 
 ```bash
-python3 -m unittest discover -s tests -v
-python3 gateway/tenant_gateway.py --config examples/dev-policy.json
-curl http://127.0.0.1:8789/healthz
+python3 scripts/build_wordpress_bridge_zip.py --output private/jump-os-wordpress-agent-bridge.zip
 ```
 
-The example policy uses harmless commands. It is not a production configuration.
+## API contract
+
+Both the Host Gateway and WordPress Bridge use a small capability model:
+
+```text
+GET  status
+GET  capabilities
+POST operations/<allowlisted-capability-id>   # empty body only
+```
+
+`tenantctl.py` has no provider SDK dependency:
+
+```bash
+python3 tenantctl.py capabilities
+python3 tenantctl.py status
+python3 tenantctl.py run plugin-elementor-activate
+```
+
+The capability list is authoritative. If it is not listed, the agent must stop and ask the site owner.
 
 ## Agent onboarding
 
-The recipient package contains `AGENTS.md`, a no-dependency `tenantctl` client, capability boundaries, and product-specific setup notes:
+The generated private package contains `AGENTS.md`, a no-dependency client, a private `.env`, and instructions for:
 
 - [Codex](docs/agents/CODEX.md)
 - [ChatGPT](docs/agents/CHATGPT.md)
@@ -53,13 +69,16 @@ The recipient package contains `AGENTS.md`, a no-dependency `tenantctl` client, 
 - [Cursor](docs/agents/CURSOR.md)
 - [Local agents](docs/agents/LOCAL-AGENTS.md)
 
-Create a package with `python3 scripts/build_recipient_pack.py --help`. Never commit a generated package containing credentials.
+## Development checks
 
-## Public-project boundaries
+```bash
+python3 -m unittest discover -s tests -v
+python3 -m py_compile gateway/tenant_gateway.py client/tenantctl.py scripts/build_recipient_pack.py scripts/build_wordpress_bridge_zip.py
+php -l wordpress-plugin/jump-os-wordpress-agent-bridge/jump-os-wordpress-agent-bridge.php
+```
 
-This repository deliberately does not contain tenant domains, client names, usernames, IP addresses, backups, production paths, API tokens, application passwords, or Caddy credentials. Use the templates under `examples/` to create private deployment material.
+See [architecture](docs/ARCHITECTURE.md) for the security boundary. The public repository never contains tenant domains, client names, host paths, backups, tokens, application passwords, or provider credentials.
 
 ## License
 
 [MIT](LICENSE)
-Tenant-scoped, auditable access for human and AI operators.

@@ -1,50 +1,58 @@
 # Architecture
 
-## Boundary map
+## One capability contract, three adapters
 
 ```text
-Recipient agent or human
+Human or AI agent
         |
-        | HTTPS + one tenant-scoped bearer token
+        | private token or WordPress application password
         v
-Reverse proxy path dedicated to one tenant
+    tenantctl / WordPress REST client
         |
-        v
-Rootless tenant-gateway service
-        |                 \
-        | exact sudoers    \ WordPress Editor credentials
-        v                  v
-Root-owned fixed wrappers  WordPress REST/dashboard
+        +---------------- Native WordPress REST ----------------> Editor role, one site
         |
-        v
-One named WordPress container and one mounted wp-content tree
+        +---------------- WordPress Bridge ---------------------> allowed plugin activation, one site
+        |
+        +---------------- Host Gateway -------------------------> fixed root-owned wrappers, one tenant
 ```
 
-The gateway never receives a command, plugin path, filesystem path, database query, or container name from the network. Its private JSON policy maps a fixed route to a fixed, root-owned wrapper.
+The product boundary is the same in each mode: the recipient can discover and use only capabilities the tenant owner configured. The adapter determines how much maintenance is possible; it does not broaden the recipient's authority.
+
+## Adapter responsibilities
+
+| Adapter | Runs where | Good for | Does not provide |
+| --- | --- | --- | --- |
+| Native WordPress REST | WordPress itself | Content and media work using WordPress roles | Plugin/core maintenance or host access. |
+| WordPress Bridge | A custom WordPress plugin | Status plus activation of exact configured plugins | A claim that a provider backup exists; arbitrary plugin actions. |
+| Host Gateway | Owner-controlled host | Verified-backup maintenance through root-owned fixed wrappers | A portable shared-hosting installation or generic shell. |
 
 ## Roles
 
 | Role | Intended use | Can do |
 | --- | --- | --- |
-| WordPress Editor | Content owner or content-focused agent | Edit published pages, posts, media, and Elementor content within one site. |
-| Gateway viewer | Support agent | Read the tenant status and the approved capability list. |
-| Gateway operator | Maintenance agent | Invoke the named Elementor update or activation wrapper. |
-| Host administrator | Platform owner only | Install wrappers, rotate/revoke tokens, inspect the host, or change the policy. |
+| WordPress Editor | Content owner or content-focused agent | Edit only the site's published content, media, and approved builder content. |
+| Viewer token | Support/review agent | Read tenant status and listed capabilities. |
+| Operator token | Explicit maintenance agent | Invoke only a listed, empty-body capability. |
+| Site/host administrator | Owner only | Install/configure adapters, rotate tokens, and choose backup/recovery procedures. |
 
-WordPress Editor and gateway operator are separate credentials. Neither one is a host administrator.
+An Editor is not an administrator. An operator token is not a shell. A site administrator is not an invitation to hand the agent the hosting account.
 
-## Non-negotiable constraints
+## Host Gateway constraints
 
-- The gateway binds only to `127.0.0.1` or `::1`; the reverse proxy owns TLS and public routing.
-- The gateway service user is not in the `docker` group and has no general `sudo` or SSH shell privilege.
-- Each `sudoers` entry names one wrapper with no wildcard arguments.
-- The systemd unit cannot use `NoNewPrivileges=true`, because that would block the deliberately narrow `sudo` elevation. The exact sudoers allowlist is the privilege boundary; do not widen it.
-- Wrapper scripts use fixed `docker exec` targets supplied by a root-owned tenant configuration. They must not evaluate request input.
-- Tokens are stored as SHA-256 hashes in the private policy. Audit events never store bearer tokens or WordPress passwords.
-- A public repository contains templates only. Production domains, paths, usernames, tokens, backups, and Caddy credentials stay private.
+The Host Gateway binds to loopback, and the owner's reverse proxy provides TLS and routing. Its private policy maps each lower-case capability ID to an exact root-owned wrapper. It never accepts a command, path, plugin file, container name, SQL, or dynamic argument from the network.
+
+- The service identity has no login shell, Docker group, or general sudo.
+- Every sudoers entry is one exact wrapper with no wildcard arguments.
+- A wrapper must hold its tenant identifier and backup process privately and take no arguments.
+- Tokens are stored as SHA-256 hashes; audit logs never store bearer tokens or WordPress passwords.
+- `NoNewPrivileges=true` cannot be used if the chosen Host Gateway design intentionally relies on exact sudo elevation; the exact sudoers allowlist is then the privilege boundary.
+
+## WordPress Bridge constraints
+
+The Bridge stores only password hashes in WordPress options. Its Settings screen is admin-only. It exposes only the exact plugin files the site owner listed, never a plugin path supplied by an API caller. The base bridge deliberately omits update operations because it cannot prove a portable, restorable pre-update backup across providers.
 
 ## Threat model and limits
 
-This protects sibling tenants from an operator or agent that has a recipient package. It does not turn a WordPress Editor into a safe reviewer of untrusted page code: content, HTML widgets, and third-party plugins still affect visitors to that one tenant. Use WordPress revision review and staging when content risk requires it.
+This protects sibling tenants and the hosting account from a recipient package. It does not make unsafe page HTML, third-party plugins, or an over-privileged WordPress role harmless within the one tenant. Use revisions, staging, provider backups, and human approval according to the risk of the requested change.
 
-The gateway itself is a privileged control surface. Keep it small, patch the host, put it behind HTTPS, use a long random token, rotate that token after sharing a package, and revoke it immediately if a package is lost.
+A public repository has only source and templates. Tenant domains, customer names, host paths, backups, tokens, application passwords, provider credentials, and generated private handoff ZIPs remain private.
