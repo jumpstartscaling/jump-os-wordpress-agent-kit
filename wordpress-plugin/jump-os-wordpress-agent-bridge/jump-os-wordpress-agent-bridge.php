@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Jump OS WordPress Agent Bridge
  * Description: Tenant-scoped, token-authenticated capabilities for approved human and AI operators.
- * Version: 0.1.0
+ * Version: 0.3.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Christopher Amaya

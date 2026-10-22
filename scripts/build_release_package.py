@@ -52,6 +52,9 @@ def main() -> int:
     args = parser.parse_args()
     if not VERSION.fullmatch(args.version):
         parser.error("version must be a semantic version without a leading v")
+    project_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    if args.version != project_version:
+        parser.error(f"requested version {args.version} does not match VERSION ({project_version})")
     if args.output.exists():
         raise SystemExit(f"refusing to overwrite existing output: {args.output}")
     args.output.mkdir(parents=True)

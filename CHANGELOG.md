@@ -2,7 +2,7 @@
 
 All notable changes are recorded here. This project uses Semantic Versioning; see [VERSIONING.md](VERSIONING.md).
 
-## Unreleased
+## 0.3.0 - 2026-10-22
 
 - Add formal compatibility, upgrade, security, support, and governance documentation.
 - Add agent-runtime deployment guidance and compatibility-report intake.

@@ -25,6 +25,7 @@ class WordPressBridgePackageTests(unittest.TestCase):
                 self.assertNotIn(".env", names)
                 source = archive.read(plugin_file).decode("utf-8")
                 self.assertIn("Plugin Name: Jump OS WordPress Agent Bridge", source)
+                self.assertIn("Version: 0.3.0", source)
                 self.assertIn("License: MIT", source)
 
 
